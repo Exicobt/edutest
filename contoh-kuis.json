@@ -1,0 +1,35 @@
+{
+  "judul": "Kuis Matematika Dasar",
+  "deskripsi": "Latihan penjumlahan dan perkalian",
+  "kategori": "Matematika",
+  "waktu": 120,
+  "tipe": "publik",
+  "pertanyaan": [
+    {
+      "soal": "Berapa 1 + 1?",
+      "benar": "2",
+      "salah": [
+        "1",
+        "3",
+        "4"
+      ]
+    },
+    {
+      "soal": "Berapa 3 x 4?",
+      "benar": "12",
+      "salah": [
+        "7",
+        "14"
+      ]
+    },
+    {
+      "soal": "Berapa 10 - 4?",
+      "benar": "6",
+      "salah": [
+        "4",
+        "5",
+        "7"
+      ]
+    }
+  ]
+}

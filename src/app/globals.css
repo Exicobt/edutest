@@ -1,0 +1,308 @@
+@import "tailwindcss";
+
+:root {
+  --kertas: #f3f5f9;
+  --putih: #ffffff;
+  --tinta: #1b2030;
+  --tinta-lembut: #5b6478;
+  --garis: #d9dee8;
+  --biru: #2b3fd6;
+  --biru-tua: #1f2fa8;
+  --biru-muda: #e6e9fb;
+  --pensil: #ffc93c;
+  --benar: #1e9e6a;
+  --benar-muda: #e1f5ec;
+  --salah: #e5484d;
+  --salah-muda: #fde8e9;
+}
+
+@theme {
+  --color-kertas: var(--kertas);
+  --color-tinta: var(--tinta);
+  --color-lembut: var(--tinta-lembut);
+  --color-garis: var(--garis);
+  --color-biru: var(--biru);
+  --color-biru-tua: var(--biru-tua);
+  --color-biru-muda: var(--biru-muda);
+  --color-pensil: var(--pensil);
+  --color-benar: var(--benar);
+  --color-benar-muda: var(--benar-muda);
+  --color-salah: var(--salah);
+  --color-salah-muda: var(--salah-muda);
+  --font-sans: var(--f-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--f-display), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--kertas);
+  color: var(--tinta);
+  font-family: var(--f-body), ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--f-display), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--biru);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--pensil);
+  color: var(--tinta);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--garis);
+  border-radius: 9999px;
+}
+
+/* Kolom input dasar */
+.input {
+  width: 100%;
+  background: var(--putih);
+  border: 2px solid var(--garis);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: var(--tinta);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input::placeholder {
+  color: #98a1b3;
+}
+.input:hover {
+  border-color: #b9c1d1;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--biru);
+  box-shadow: 0 0 0 4px var(--biru-muda);
+}
+
+/* Gelembung jawaban ala lembar jawaban komputer */
+.gelembung {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  border: 2px solid var(--tinta);
+  font-family: var(--f-display), sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: var(--putih);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.gelembung-terisi {
+  background: var(--tinta);
+  color: var(--putih);
+}
+
+/* Bayangan tombol bergaya cap */
+.cap {
+  box-shadow: 0 3px 0 0 var(--tinta);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.cap:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 0 var(--tinta);
+}
+.cap:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 0 var(--tinta);
+}
+
+/* Pemuatan */
+.loader {
+  height: 6px;
+  width: 140px;
+  border-radius: 9999px;
+  --c: no-repeat linear-gradient(var(--biru) 0 0);
+  background: var(--c), var(--c), var(--biru-muda);
+  background-size: 60% 100%;
+  animation: l16 2.4s infinite;
+}
+@keyframes l16 {
+  0% { background-position: -150% 0, -150% 0; }
+  66% { background-position: 250% 0, -150% 0; }
+  100% { background-position: 250% 0, 250% 0; }
+}
+
+/* Satu gerakan masuk untuk hero beranda */
+@keyframes isi-gelembung {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.hero-gelembung {
+  animation: isi-gelembung 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-gelembung, .loader { animation: none; }
+  .cap, .cap:hover, .cap:active { transition: none; transform: none; }
+}
+
+/* ========== Arena kompetitif: efek makin tebal seiring soal naik ========== */
+.arena {
+  --t: 0;
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100vh - 4rem);
+  background-color: color-mix(in srgb, var(--kertas), #ff9d7a calc(var(--t) * 60%));
+  transition: background-color 0.8s ease;
+}
+.arena::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 50%, rgb(229 72 77 / calc(var(--t) * 0.5)) 100%);
+  transition: background 0.8s ease;
+}
+.arena > * {
+  position: relative;
+  z-index: 1;
+}
+.arena > .arena-garis {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: calc(var(--t) * 14px);
+  background: repeating-linear-gradient(-45deg, var(--tinta) 0 12px, var(--pensil) 12px 24px);
+  background-size: 34px 34px;
+  pointer-events: none;
+}
+.arena-garis.bergerak {
+  animation: garis-jalan 0.9s linear infinite;
+}
+@keyframes garis-jalan {
+  to { background-position: 34px 0; }
+}
+
+/* Kartu soal: garis dan bayangan menebal mengikuti --t */
+.arena-kartu {
+  border-width: calc(2px + 2px * var(--t));
+  box-shadow: calc(var(--t) * 8px) calc(var(--t) * 8px) 0 0 var(--tinta);
+  transition: box-shadow 0.6s, border-width 0.6s;
+}
+.arena-judul {
+  font-weight: 800;
+  font-size: calc(1.5rem + var(--t) * 0.5rem);
+}
+@media (min-width: 640px) {
+  .arena-judul { font-size: calc(1.875rem + var(--t) * 0.75rem); }
+}
+
+.aksen-bar {
+  background: color-mix(in srgb, var(--biru), var(--salah) calc(var(--t) * 100%));
+}
+
+/* Getar layar di detik-detik terakhir */
+.getar {
+  animation: getar 0.35s linear infinite;
+}
+@keyframes getar {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 2px) rotate(-0.15deg); }
+  40% { transform: translate(3px, -2px) rotate(0.15deg); }
+  60% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 3px); }
+}
+
+.denyut {
+  animation: denyut 0.7s ease-in-out infinite;
+}
+@keyframes denyut {
+  50% { transform: scale(1.08); }
+}
+
+/* Opsi salah bergetar sekali saat hasil muncul */
+.getar-sekali {
+  animation: getar 0.35s linear 2;
+}
+
+/* Pengumuman layar penuh (SOAL FINAL, dll.) */
+.umumkan {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: rgb(27 32 48 / 0.82);
+  animation: umumkan-bg 1.5s ease-out forwards;
+}
+.umumkan-teks {
+  font-family: var(--f-display), sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  font-size: clamp(3rem, 14vw, 9rem);
+  line-height: 0.95;
+  color: var(--pensil);
+  text-align: center;
+  -webkit-text-stroke: 3px var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 6px 6px 0 var(--salah);
+  animation: umumkan-masuk 1.5s cubic-bezier(0.2, 1.3, 0.4, 1) forwards;
+}
+@keyframes umumkan-bg {
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes umumkan-masuk {
+  0% { transform: scale(2.4) rotate(-6deg); opacity: 0; }
+  25% { transform: scale(1) rotate(-3deg); opacity: 1; }
+  85% { transform: scale(1.04) rotate(-3deg); opacity: 1; }
+  100% { transform: scale(1.3) rotate(-3deg); opacity: 0; }
+}
+
+/* Podium */
+.podium-naik {
+  transform-origin: bottom;
+  animation: podium-naik 0.7s cubic-bezier(0.2, 1.2, 0.4, 1) both;
+}
+@keyframes podium-naik {
+  from { transform: scaleY(0); opacity: 0; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+.masuk-kiri {
+  animation: masuk-kiri 0.4s ease-out both;
+}
+@keyframes masuk-kiri {
+  from { transform: translateX(-24px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .getar, .getar-sekali, .denyut, .arena-garis.bergerak, .podium-naik, .masuk-kiri { animation: none; }
+  .umumkan { display: none; }
+}
